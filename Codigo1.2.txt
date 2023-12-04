@@ -1,0 +1,53 @@
+#include <Stepper.h>
+
+// Definir el número de pasos por revolución para tu motor
+const int pasosPorRevolucion = 2048; // Cambia este valor según las especificaciones de tu motor
+
+// Configurar los pines para el motor paso a paso
+const int pinMotor1 = 8; // Conectado al pin IN1 del controlador del motor
+const int pinMotor2 = 9; // Conectado al pin IN2 del controlador del motor
+const int pinMotor3 = 10; // Conectado al pin IN3 del controlador del motor
+const int pinMotor4 = 11; // Conectado al pin IN4 del controlador del motor
+
+// Configurar el objeto Stepper
+Stepper motor(pasosPorRevolucion, pinMotor1, pinMotor2, pinMotor3, pinMotor4);
+
+// Definir los pines para los sensores analógicos
+const int pinSensor1 = A0; // Sensor 1 conectado al pin A0
+const int pinSensor2 = A1; // Sensor 2 conectado al pin A1
+const int pinSensor3 = A2; // Sensor 3 conectado al pin A2
+const int pinSensor4 = A3; // Sensor 4 conectado al pin A3
+
+void setup() {
+  // Inicializar el motor con una velocidad baja
+  motor.setSpeed(10); // Puedes ajustar la velocidad aquí
+
+  // Iniciar la comunicación serial
+  Serial.begin(9600);
+}
+
+void loop() {
+  for (int i = 0; i < 10; i++) {
+    // Realizar diez lecturas
+    int lecturaSensor1 = analogRead(pinSensor1);
+    int lecturaSensor2 = analogRead(pinSensor2);
+    int lecturaSensor3 = analogRead(pinSensor3);
+    int lecturaSensor4 = analogRead(pinSensor4);
+
+    // Sumar uno a uno los valores de los sensores
+    int sumaSensores = lecturaSensor1 + lecturaSensor2 + lecturaSensor3 + lecturaSensor4;
+
+    // Mover el motor paso a paso según la suma de los valores de los sensores
+    int pasosAMover = map(sumaSensores, 0, 4095, 0, pasosPorRevolucion); // Mapear la suma de los sensores al rango de pasos
+    motor.step(pasosAMover);
+
+    // Imprimir la suma de los sensores en el monitor serial
+    Serial.print("Suma de los sensores: ");
+    Serial.println(sumaSensores);
+
+    delay(1000); // Esperar un segundo antes de la próxima lectura
+  }
+
+  // Esperar antes de realizar otra serie de lecturas
+  delay(5000); // Esperar 5 segundos antes de iniciar el siguiente ciclo
+}

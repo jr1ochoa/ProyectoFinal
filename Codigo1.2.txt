@@ -1,4 +1,5 @@
 int ledPin = 13; // Pin digital que simula el movimiento del motor que contiene el rodillo que mueve la papeleta
+int buttonPin = 2;    // Pin digital al que está conectado el SENSOR QUE DETECTA LA PAPELETA
 // Definición de pines para los pulsadores de respuestas
 const int pinPulsadorA = 2;
 const int pinPulsadorB = 3;
@@ -27,8 +28,7 @@ Serial.println("Ingresa la papeleta del examen ");
   for (int i = 0; i < 5; i++) {
     // Solicitar la respuesta al estudiante
     Serial.println("realizando lectura de las respuestas");
-    // Serial.print(i + 1);
-    // Serial.println(": ");
+    
 
     // Esperar hasta que se presione uno de los pulsadores
     respuestasEstudiante[i] = obtenerRespuesta(pinPulsadorA, pinPulsadorB, pinPulsadorC, pinPulsadorD);
@@ -37,7 +37,7 @@ Serial.println("Ingresa la papeleta del examen ");
     Serial.print("Respuesta ingresada: ");
     Serial.println(respuestasEstudiante[i]);
     Serial.println();
-   digitalWrite(ledPin, LOW); // Encender el LED
+   digitalWrite(ledPin, HIGH); // Encender el LED
   delay(500); // Esperar 0.5 segundo
 digitalWrite(ledPin, LOW); // Encender el LED
   delay(500); // Esperar 0.5 segundo
@@ -80,3 +80,4 @@ int calcularNota(char respuestasEstudiante[]) {
   }
   return nota;
 }
+
